@@ -108,10 +108,11 @@ for(i in 1:nrow(test)){TestTrainIndicator[i]="Test"}
       test=cbind(test,TestTrainIndicator)
 Merged=rbind(train,test)
 means=apply(Merged[,1:128],MARGIN=2,FUN=mean)
-sd=apply(Merged[,1:128],MARGIN=2,FUN=sd)  
+sd=apply(Merged[,1:128],MARGIN=2,FUN=sd) 
+meansAct=matrix(nrow=128,ncol=3)
+meansSubj=matrix(nrow=128,ncol=3)
 for(i in 1:128){
-                meansAct=matrix(nrow=128,ncol=3)
-                meansSubj=matrix(nrow=128,ncol=3)
+                
   meansAct[i,1]=mean(Merged[,i][Merged$activity=="body_acc"])
                 
                 meansAct[i,2]=mean(Merged[,i][Merged$activity=="body_gyro"])
@@ -122,18 +123,23 @@ for(i in 1:128){
                 meansSubj[i,2]=mean(Merged[,i][Merged$subject=="y"])
                 meansSubj[i,3]=mean(Merged[,i][Merged$subject=="z"])
                }
+SDAct=data.frame(nrow=128,ncol=3)
+SDSubj=data.frame(nrow=128,ncol=3)
 for(i in 1:128){
-  SDAct=matrix(nrow=128,ncol=3)
-  SDSubj=matrix(nrow=128,ncol=3)
-  SDAct[i,1]=sd(Merged[,i][Merged$activity=="body_acc"])
   
-  SDAct[i,2]=sd(Merged[,i][Merged$activity=="body_gyro"])
+  SDAct[i,1]<-sd(Merged[,i][Merged$activity=="body_acc"])
   
-  SDAct[i,3]=sd(Merged[,i][Merged$activity=="total_acc"])
+  SDAct[i,2]<-sd(Merged[,i][Merged$activity=="body_gyro"])
   
-  SDSubj[i,1]=sd(Merged[,i][Merged$subject=="x"])
-  SDSubj[i,2]=sd(Merged[,i][Merged$subject=="y"])
-  SDSubj[i,3]=sd(Merged[,i][Merged$subject=="z"])
+  SDAct[i,3]<-sd(Merged[,i][Merged$activity=="total_acc"])
+  print(SDAct[i,])
+  SDSubj[i,1]<-sd(Merged[,i][Merged$subject=="x"])
+  SDSubj[i,2]<-sd(Merged[,i][Merged$subject=="y"])
+  SDSubj[i,3]<-sd(Merged[,i][Merged$subject=="z"])
 }
+colnames(meansAct)<-colnames(SDAct)
+colnames(meansSubj)<-colnames(SDAct)
+colnames(SDAct)<-colnames(SDAct)
+colnames(SDSubj)<-colnames(SDAct)
 Results=rbind(meansAct,meansSubj,SDAct,SDSubj)
-write.table(Results,"run_analysis.txt",row.name=FALSE)
+write.table(Results,"run_analysis.txt",row.names=FALSE)
