@@ -1,0 +1,139 @@
+setwd("C:/Users/tlawt/Desktop/R Library/JH/UCI HAR Dataset/train/Inertial Signals")
+      body_acc1=read.table("body_acc_x_train.txt")
+      subject=character(7352)
+for(i in 1:7352){subject[i]="x"}
+body_acc1=cbind(body_acc1,subject)
+      body_acc2=read.table("body_acc_y_train.txt")
+subject=character(7352)
+
+for(i in 1:7352){subject[i]="y"}
+body_acc2=cbind(body_acc2,subject)
+      body_acc3=read.table("body_acc_z_train.txt")
+subject=character(7352)
+for(i in 1:7352){subject[i]="z"}
+body_acc3=cbind(body_acc3,subject)
+      body_acc=rbind(body_acc1,body_acc2,body_acc3)
+activity=character(22056)
+for(i in 1:22056){activity[i]="body_acc"}
+body_acc=cbind(body_acc,activity)
+      body_gyro1=read.table("body_gyro_x_train.txt")
+subject=character(7352)
+for(i in 1:7352){subject[i]="x"}
+body_gyro1=cbind(body_gyro1,subject)
+      body_gyro2=read.table("body_gyro_y_train.txt")
+subject=character(7352)
+for(i in 1:7352){subject[i]="y"}
+body_gyro2=cbind(body_gyro2,subject)
+      body_gyro3=read.table("body_gyro_z_train.txt")
+subject=character(7352)
+for(i in 1:7352){subject[i]="z"}
+body_gyro3=cbind(body_gyro3,subject)
+      body_gyro=rbind(body_gyro1,body_gyro2,body_gyro3)
+activity=character(22056)
+for(i in 1:22056){activity[i]="body_gyro"}
+body_gyro=cbind(body_gyro,activity)
+      total_acc1=read.table("body_acc_x_train.txt")
+subject=character(7352)
+for(i in 1:7352){subject[i]="x"}
+total_acc1=cbind(total_acc1,subject)
+      total_acc2=read.table("body_acc_y_train.txt")
+subject=character(7352)
+for(i in 1:7352){subject[i]="y"}
+total_acc2=cbind(total_acc2,subject)
+      total_acc3=read.table("body_acc_z_train.txt")
+subject=character(7352)
+for(i in 1:7352){subject[i]="z"}
+total_acc3=cbind(total_acc3,subject)
+      total_acc=rbind(total_acc1,total_acc2,total_acc3)
+activity=character(22056)
+for(i in 1:22056){activity[i]="total_acc"}
+total_acc=cbind(total_acc,activity)
+      train=rbind(body_acc,body_gyro,total_acc)
+setwd("C:/Users/tlawt/Desktop/R Library/JH/UCI HAR Dataset/test/Inertial Signals")
+      body_acc1=read.table("body_acc_x_test.txt")
+subject=character(2947)
+for(i in 1:2947){subject[i]="x"}
+body_acc1=cbind(body_acc1,subject)
+      body_acc2=read.table("body_acc_y_test.txt")
+subject=character(2947)
+for(i in 1:2947){subject[i]="y"}
+body_acc2=cbind(body_acc2,subject)
+      body_acc3=read.table("body_acc_z_test.txt")
+subject=character(2947)
+for(i in 1:2947){subject[i]="z"}
+body_acc3=cbind(body_acc3,subject)
+      body_acc=rbind(body_acc1,body_acc2,body_acc3)
+activity=character(8841)
+for(i in 1:8841){activity[i]="body_acc"}
+body_acc=cbind(body_acc,activity)
+      body_gyro1=read.table("body_gyro_x_test.txt")
+subject=character(2947)
+for(i in 1:2947){subject[i]="x"}
+body_gyro1=cbind(body_gyro1,subject)
+      body_gyro2=read.table("body_gyro_y_test.txt")
+subject=character(2947)
+for(i in 1:2947){subject[i]="y"}
+body_gyro2=cbind(body_gyro2,subject)
+      body_gyro3=read.table("body_gyro_z_test.txt")
+subject=character(2947)
+for(i in 1:2947){subject[i]="z"}
+body_gyro3=cbind(body_gyro3,subject)
+      body_gyro=rbind(body_gyro1,body_gyro2,body_gyro3)
+activity=character(8841)
+for(i in 1:8841){activity[i]="body_gyro"}
+body_gyro=cbind(body_gyro,activity)
+      total_acc1=read.table("body_acc_x_test.txt")
+subject=character(2947)
+for(i in 1:2947){subject[i]="x"}
+total_acc1=cbind(total_acc1,subject)
+      total_acc2=read.table("body_acc_y_test.txt")
+subject=character(2947)
+for(i in 1:2947){subject[i]="y"}
+total_acc2=cbind(total_acc2,subject)
+      total_acc3=read.table("body_acc_z_test.txt")
+subject=character(2947)
+for(i in 1:2947){subject[i]="z"}
+total_acc3=cbind(total_acc3,subject)
+      total_acc=rbind(total_acc1,total_acc2,total_acc3)
+activity=character(8841)
+for(i in 1:8841){activity[i]="total_acc"}
+total_acc=cbind(total_acc,activity)
+      test=rbind(body_acc,body_gyro,total_acc)
+      TestTrainIndicator=character(nrow(train))
+for(i in 1:nrow(train)){TestTrainIndicator[i]="Train"}
+train=cbind(train,TestTrainIndicator)
+      TestTrainIndicator=character(nrow(test))
+for(i in 1:nrow(test)){TestTrainIndicator[i]="Test"}
+   
+      test=cbind(test,TestTrainIndicator)
+Merged=rbind(train,test)
+means=apply(Merged[,1:128],MARGIN=2,FUN=mean)
+sd=apply(Merged[,1:128],MARGIN=2,FUN=sd)  
+for(i in 1:128){
+                meansAct=matrix(nrow=128,ncol=3)
+                meansSubj=matrix(nrow=128,ncol=3)
+  meansAct[i,1]=mean(Merged[,i][Merged$activity=="body_acc"])
+                
+                meansAct[i,2]=mean(Merged[,i][Merged$activity=="body_gyro"])
+                
+                meansAct[i,3]=mean(Merged[,i][Merged$activity=="total_acc"])
+               
+                meansSubj[i,1]=mean(Merged[,i][Merged$subject=="x"])
+                meansSubj[i,2]=mean(Merged[,i][Merged$subject=="y"])
+                meansSubj[i,3]=mean(Merged[,i][Merged$subject=="z"])
+               }
+for(i in 1:128){
+  SDAct=matrix(nrow=128,ncol=3)
+  SDSubj=matrix(nrow=128,ncol=3)
+  SDAct[i,1]=sd(Merged[,i][Merged$activity=="body_acc"])
+  
+  SDAct[i,2]=sd(Merged[,i][Merged$activity=="body_gyro"])
+  
+  SDAct[i,3]=sd(Merged[,i][Merged$activity=="total_acc"])
+  
+  SDSubj[i,1]=sd(Merged[,i][Merged$subject=="x"])
+  SDSubj[i,2]=sd(Merged[,i][Merged$subject=="y"])
+  SDSubj[i,3]=sd(Merged[,i][Merged$subject=="z"])
+}
+Results=rbind(meansAct,meansSubj,SDAct,SDSubj)
+write.table(Results,"run_analysis.txt",row.name=FALSE)
